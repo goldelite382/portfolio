@@ -1,0 +1,33 @@
+$primary-background: hsla(230, 50%, 80%, 1);
+$active-background: hsla(220, 50%, 60%, 1);
+
+$main-contrast: hsla(50, 50%, 50%, 1);
+
+
+html {
+	background: $primary-background;
+}
+
+#tabs {
+	border: 2px solid $main-contrast;
+	padding: 2px;
+	display: inline-block;
+	
+	ul {
+		padding-left: 0px;
+		margin: 0px;
+	}
+	
+	li {
+		display: inline-block;
+		margin: 2px;
+		padding: 5px;
+		color: red;
+		border: 1px solid $main-contrast;
+	}
+	
+	li:hover {
+		cursor: pointer;
+		background-color: $active-background;
+	}
+}
