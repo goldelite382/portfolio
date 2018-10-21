@@ -3,7 +3,7 @@
 const http = require('http');
 const restify = require('restify');
 //const mongoose = require('mongoose');
-//const mysql = require('mysql');
+const mysql = require('mysql');
 
 const hostname = '0.0.0.0';
 const port = 8080;
@@ -53,6 +53,12 @@ function add_tab(req, res, next) {
 server.get('/add/:name', add_tab);
 server.get('/tabs/:name', get_tabs);
 
+var con = mysql.createConnection({
+  host: "mysql://mysql:3306/",
+  user: "goldelite",
+  password: "X08-51898",
+  database: "main",
+});
 
 //var db = mongoose.connection;
 //db.on('error', console.error.bind(console, 'connection error:'));
@@ -60,6 +66,13 @@ server.get('/tabs/:name', get_tabs);
 //db.once('open', function() {
 	server.listen(port, hostname, function() {
 		console.log("Listening on '" + hostname + ':' + port + "'");
+		
+		console.log("Connecting to database...");
+		con.connect(function(err) {
+			if (err) throw err;
+			
+			console.log("Connected to database.");
+		});
 	});
 	
 //	var kittySchema = new mongoose.Schema({
@@ -70,15 +83,9 @@ server.get('/tabs/:name', get_tabs);
 //});
 
 
+
+
 /*
-var con = mysql.createConnection({
-  host: "172.27.93.115",
-  user: "production",
-  password: "production",
-  database: "ecm",
-});
-
-
 module.exports = function(app) {
   //var todoList = require('../controllers/todoListController');
 
@@ -93,26 +100,8 @@ module.exports = function(app) {
     .put(todoList.update_a_task)
     .delete(todoList.delete_a_task);
 };
+*/
 
 
 
-
-
-console.log("Connecting...");
-con.connect(function(err) {
-	if (err) throw err;
-	console.log("Connected!");
-	});
-	
-	console.log("Querying...");
-	con.query("SELECT job_number FROM tracker3plus LIMIT 3", function (err, result, fields) {
-		if (err) throw err;
-		
-		for(var i = 0; i < result.length; i++) {
-			console.log(result[i].job_number);
-		}
-		console.log("Queried");
-	});
-	
-	console.log("Finished");
 	//*/
