@@ -2,13 +2,13 @@
 
 const http = require('http');
 const restify = require('restify');
-const mongoose = require('mongoose');
+//const mongoose = require('mongoose');
 //const mysql = require('mysql');
 
 const hostname = '127.0.0.1';
 const port = 3000;
 
-mongoose.connect('mongodb://localhost/test', { useNewUrlParser : true });
+//mongoose.connect('mongodb://localhost/test', { useNewUrlParser : true });
 //server.listen(port, hostname, () => { console.log(`Server running at http://${hostname}:${port}/`); });
 var server = restify.createServer();
 
@@ -23,27 +23,29 @@ server.use(
 
 
 
-var Kitten;
+//var Kitten;
 
 function get_tabs(req, res, next) {
-	if(!Kitten) console.error.bind(console, 'Not initialised');
+	//if(!Kitten) console.error.bind(console, 'Not initialised');
 	
 	//var silence = new Kitten({ name: 'Silence' });
 	//console.log(silence.name); // 'Silence'
 	
-	Kitten.find({ name: new RegExp('^' + escapeRegExp(req.name)) }, function(results) {
-		res.send(results);
-	});
+	//Kitten.find({ name: new RegExp('^' + escapeRegExp(req.name)) }, function(results) {
+	//	res.send(results);
+	//});
+	res.send("Got tabs for '" + req.name + "'!!");
 	next();
 }
 
 
 function add_tab(req, res, next) {
-	if(!Kitten) console.error.bind(console, 'Not initialised');
+	//if(!Kitten) console.error.bind(console, 'Not initialised');
 	
-	var silence = new Kitten({ name: res.name });
-	console.log(silence.name);
-	res.send('Added ' + silence.name);
+	//var silence = new Kitten({ name: res.name });
+	//console.log(silence.name);
+	//res.send('Added ' + silence.name);
+	res.send("Added '" + req.name + "' to tabs!!");
 	next();
 }
 
@@ -52,20 +54,20 @@ server.get('/add/:name', add_tab);
 server.get('/tabs/:name', get_tabs);
 
 
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
+//var db = mongoose.connection;
+//db.on('error', console.error.bind(console, 'connection error:'));
 
-db.once('open', function() {
+//db.once('open', function() {
 	server.listen(port, function() {
 		console.log("Listening");
 	});
 	
-	var kittySchema = new mongoose.Schema({
-		name: String
-	});
+//	var kittySchema = new mongoose.Schema({
+//		name: String
+//	});
 	
-	Kitten = mongoose.model('Kitten', kittySchema);
-});
+//	Kitten = mongoose.model('Kitten', kittySchema);
+//});
 
 
 /*
