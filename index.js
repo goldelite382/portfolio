@@ -6,7 +6,7 @@ const restify = require('restify');
 //const mysql = require('mysql');
 
 const hostname = '127.0.0.1';
-const port = 3000;
+const port = 8080;
 
 //mongoose.connect('mongodb://localhost/test', { useNewUrlParser : true });
 //server.listen(port, hostname, () => { console.log(`Server running at http://${hostname}:${port}/`); });
