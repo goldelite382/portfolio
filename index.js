@@ -4,6 +4,7 @@ const http = require('http');
 const restify = require('restify');
 //const mongoose = require('mongoose');
 const mysql = require('mysql');
+const path = require('path');
 
 const hostname = '0.0.0.0';
 const port = 8080;
@@ -51,9 +52,11 @@ function add_tab(req, res, next) {
 }
 
 
+
 server.get('/add/:name', add_tab);
 server.get('/tabs/:query', get_tabs);
 server.get('/tabs/', get_tabs);
+server.get('/home/*', restify.plugins.serveStatic({ appendRequestPath: false, directory: __dirname, default: 'main.html' }) );
 
 var con = mysql.createConnection({
   host: "sql2.freemysqlhosting.net",

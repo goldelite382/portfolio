@@ -28,15 +28,16 @@ class Tabs extends React.Component {
 	}
 	
 	componentDidMount() {
-		fetch("http://127.0.0.1:3000/tabs")
+		fetch("http://localhost:8080/tabs/")
 			.then(res => res.json())
 			.then(
-				result => { this.setState({ tabs : result }); },
+				result => { this.setState({ tabs : result.tabs }); },
 				error => { this.setState({ tabs : [] }); }
 				)
 	}
 	
 	render() {
+		console.log("Tabs are: " + this.state.tabs);
 		let tablist = this.state.tabs.map((tab, index) => <li key={ 't' + index } onClick={ () => { alert('hi ' + tab + '!'); } }>{tab}</li>);
 		
 		return (

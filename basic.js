@@ -62,10 +62,10 @@ var Tabs = function (_React$Component2) {
 		value: function componentDidMount() {
 			var _this3 = this;
 
-			fetch("http://127.0.0.1:3000/tabs").then(function (res) {
+			fetch("http://localhost:8080/tabs/").then(function (res) {
 				return res.json();
 			}).then(function (result) {
-				_this3.setState({ tabs: result });
+				_this3.setState({ tabs: result.tabs });
 			}, function (error) {
 				_this3.setState({ tabs: [] });
 			});
@@ -73,6 +73,7 @@ var Tabs = function (_React$Component2) {
 	}, {
 		key: 'render',
 		value: function render() {
+			console.log("Tabs are: " + this.state.tabs);
 			var tablist = this.state.tabs.map(function (tab, index) {
 				return React.createElement(
 					'li',
