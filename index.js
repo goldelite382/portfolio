@@ -34,7 +34,7 @@ function get_tabs(req, res, next) {
 	//Kitten.find({ name: new RegExp('^' + escapeRegExp(req.name)) }, function(results) {
 	//	res.send(results);
 	//});
-	res.send("Got tabs for '" + req.name + "'!!");
+	res.send("Got tabs for '" + req.params.name + "'!!");
 	next();
 }
 
@@ -45,7 +45,7 @@ function add_tab(req, res, next) {
 	//var silence = new Kitten({ name: res.name });
 	//console.log(silence.name);
 	//res.send('Added ' + silence.name);
-	res.send("Added '" + req.name + "' to tabs!!");
+	res.send("Added '" + req.params.name + "' to tabs!!");
 	next();
 }
 
@@ -59,7 +59,7 @@ server.get('/tabs/:name', get_tabs);
 
 //db.once('open', function() {
 	server.listen(port, hostname, function() {
-		console.log("Listening");
+		console.log("Listening on '" + hostname + ':' + port + "'");
 	});
 	
 //	var kittySchema = new mongoose.Schema({
