@@ -26,38 +26,40 @@ server.use(
 //var Kitten;
 
 function get_tabs(req, res, next) {
-	//if(!Kitten) console.error.bind(console, 'Not initialised');
+	var tabs = [];
+	con.query("SELECT tabname FROM tabs WHERE tabname like ?", [ req.params.query || '%' ], function(err, result, fields) {
+		if (err) throw err;
 	
-	//var silence = new Kitten({ name: 'Silence' });
-	//console.log(silence.name); // 'Silence'
-	
-	//Kitten.find({ name: new RegExp('^' + escapeRegExp(req.name)) }, function(results) {
-	//	res.send(results);
-	//});
-	res.send("Got tabs for '" + req.params.name + "'!!");
-	next();
+		for(var i = 0; i < result.length; i++) {
+			tabs.push(result[i].tabname);
+		}
+		
+		
+		res.send({ query : req.params.query,
+					tabs : tabs
+				});
+		next();
+	});
 }
 
 
 function add_tab(req, res, next) {
-	//if(!Kitten) console.error.bind(console, 'Not initialised');
-	
-	//var silence = new Kitten({ name: res.name });
-	//console.log(silence.name);
-	//res.send('Added ' + silence.name);
-	res.send("Added '" + req.params.name + "' to tabs!!");
-	next();
+	con.query("INSERT INTO tabs (tabname) VALUES (?)", [ req.params.name ], function(err, result, fields) {
+		res.send("Added '" + req.params.name + "' to tabs.");
+		next();
+	});
 }
 
 
 server.get('/add/:name', add_tab);
-server.get('/tabs/:name', get_tabs);
+server.get('/tabs/:query', get_tabs);
+server.get('/tabs/', get_tabs);
 
 var con = mysql.createConnection({
-  host: "mysql://mysql:3306/",
-  user: "goldelite",
-  password: "X08-51898",
-  database: "main",
+  host: "sql2.freemysqlhosting.net",
+  user: "sql2262231",
+  password: "eS8!fE8*",
+  database: "sql2262231",
 });
 
 //var db = mongoose.connection;
