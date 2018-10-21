@@ -5,7 +5,7 @@ const restify = require('restify');
 //const mongoose = require('mongoose');
 //const mysql = require('mysql');
 
-const hostname = '127.0.0.1';
+const hostname = '0.0.0.0';
 const port = 8080;
 
 //mongoose.connect('mongodb://localhost/test', { useNewUrlParser : true });
@@ -58,7 +58,7 @@ server.get('/tabs/:name', get_tabs);
 //db.on('error', console.error.bind(console, 'connection error:'));
 
 //db.once('open', function() {
-	server.listen(port, function() {
+	server.listen(port, hostname, function() {
 		console.log("Listening");
 	});
 	
