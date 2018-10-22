@@ -51,13 +51,9 @@ app.get('/tabs/:query', get_tabs);
 app.get('/tabs/', get_tabs);
 app.get('/home/:name', function(req, res, next) {
 						let file = req.params.name;
-						if(req.params.name.search(/main\.html/) == -1) {
-							file = path.join('output', req.params.name);
-						}
-						
-						file = path.join(__dirname, 'html', file);
+						file = path.join(__dirname, 'dist', file);
 						res.sendFile(file);
-						console.log("Serving: " + file);
+						console.log("Served " + file);
 					}
 			);
 

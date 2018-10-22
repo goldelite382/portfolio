@@ -1,7 +1,9 @@
-$primary-background: hsla(230, 50%, 80%, 1);
-$active-background: hsla(220, 50%, 60%, 1);
+$primary-background: hsla(280, 80%, 10%, 1);
+$active-background: hsla(280, 50%, 30%, 1);
 
-$main-contrast: hsla(50, 50%, 50%, 1);
+$strong-contrast: hsla(280, 50%, 80%, 1);
+$main-contrast: hsla(280, 50%, 60%, 1);
+$faint-contrast: hsla(50, 50%, 20%, 1);
 
 
 html {
@@ -9,7 +11,7 @@ html {
 }
 
 #tabs {
-	border: 2px solid $main-contrast;
+	border: 2px solid $faint-contrast;
 	padding: 2px;
 	display: inline-block;
 	
@@ -22,12 +24,13 @@ html {
 		display: inline-block;
 		margin: 2px;
 		padding: 5px;
-		color: red;
-		border: 1px solid $main-contrast;
+		color: $main-contrast;
+		border: 1px solid $faint-contrast;
 	}
 	
 	li:hover {
 		cursor: pointer;
 		background-color: $active-background;
+		color: $strong-contrast;
 	}
 }
