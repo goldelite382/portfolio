@@ -73,7 +73,6 @@ var Tabs = function (_React$Component2) {
 	}, {
 		key: 'render',
 		value: function render() {
-			console.log("Tabs are: " + this.state.tabs);
 			var tablist = this.state.tabs.map(function (tab, index) {
 				return React.createElement(
 					'li',

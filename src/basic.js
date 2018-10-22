@@ -37,7 +37,6 @@ class Tabs extends React.Component {
 	}
 	
 	render() {
-		console.log("Tabs are: " + this.state.tabs);
 		let tablist = this.state.tabs.map((tab, index) => <li key={ 't' + index } onClick={ () => { alert('hi ' + tab + '!'); } }>{tab}</li>);
 		
 		return (

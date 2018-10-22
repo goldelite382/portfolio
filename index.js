@@ -1,19 +1,15 @@
 'use strict';
 
-const http = require('http');
-const restify = require('restify');
-//const mongoose = require('mongoose');
+const express = require('express');
 const mysql = require('mysql');
 const path = require('path');
 
 const hostname = '0.0.0.0';
 const port = 8080;
 
-//mongoose.connect('mongodb://localhost/test', { useNewUrlParser : true });
-//server.listen(port, hostname, () => { console.log(`Server running at http://${hostname}:${port}/`); });
-var server = restify.createServer();
 
-server.use(
+let app = express();
+app.use(
   function crossOrigin(req,res,next){
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -22,9 +18,6 @@ server.use(
 );
 
 
-
-
-//var Kitten;
 
 function get_tabs(req, res, next) {
 	var tabs = [];
@@ -53,10 +46,20 @@ function add_tab(req, res, next) {
 
 
 
-server.get('/add/:name', add_tab);
-server.get('/tabs/:query', get_tabs);
-server.get('/tabs/', get_tabs);
-server.get('/home/*', restify.plugins.serveStatic({ appendRequestPath: false, directory: __dirname, default: 'main.html' }) );
+app.get('/add/:name', add_tab);
+app.get('/tabs/:query', get_tabs);
+app.get('/tabs/', get_tabs);
+app.get('/home/:name', function(req, res, next) {
+						let file = req.params.name;
+						if(req.params.name.search(/main\.html/) == -1) {
+							file = path.join('output', req.params.name);
+						}
+						
+						file = path.join(__dirname, 'html', file);
+						res.sendFile(file);
+						console.log("Serving: " + file);
+					}
+			);
 
 var con = mysql.createConnection({
   host: "sql2.freemysqlhosting.net",
@@ -65,48 +68,13 @@ var con = mysql.createConnection({
   database: "sql2262231",
 });
 
-//var db = mongoose.connection;
-//db.on('error', console.error.bind(console, 'connection error:'));
-
-//db.once('open', function() {
-	server.listen(port, hostname, function() {
-		console.log("Listening on '" + hostname + ':' + port + "'");
+app.listen(port, hostname, function() {
+	console.log("Listening on '" + hostname + ':' + port + "'");
+	
+	console.log("Connecting to database...");
+	con.connect(function(err) {
+		if (err) throw err;
 		
-		console.log("Connecting to database...");
-		con.connect(function(err) {
-			if (err) throw err;
-			
-			console.log("Connected to database.");
-		});
+		console.log("Connected to database.");
 	});
-	
-//	var kittySchema = new mongoose.Schema({
-//		name: String
-//	});
-	
-//	Kitten = mongoose.model('Kitten', kittySchema);
-//});
-
-
-
-
-/*
-module.exports = function(app) {
-  //var todoList = require('../controllers/todoListController');
-
-  // todoList Routes
-  server.route('/tasks')
-    .get(todoList.list_all_tasks)
-    .post(todoList.create_a_task);
-
-
-  server.route('/tasks/:taskId')
-    .get(todoList.read_a_task)
-    .put(todoList.update_a_task)
-    .delete(todoList.delete_a_task);
-};
-*/
-
-
-
-	//*/
+});
