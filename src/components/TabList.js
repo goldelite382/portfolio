@@ -1,15 +1,22 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Tab from './tab';
 
-const TabList = ({ tabs = [ { name: 'tab1' }, { name: 'tab2' }] }) => (
-	<ul> Tab:
-		{ tabs.map((tab, index) => (
-				<Tab key={index} {...tab} />
-			))
-		}
-	</ul>
-)
+export default class TabList extends Component {
+	render() {
+		//const { tabs } = this.props;
+		let tabs = [];
+		
+		return (
+			<ul> Tab:
+				{ tabs.map((tab, index) => (
+						<Tab key={index} name={tab} />
+					))
+				}
+			</ul>
+		);
+	}
+}
 
 TabList.propTypes = {
 	tabs: PropTypes.arrayOf(
@@ -17,5 +24,4 @@ TabList.propTypes = {
 			name : PropTypes.string.isRequired,
 		})
 	)}
-	
-export default TabList;
+

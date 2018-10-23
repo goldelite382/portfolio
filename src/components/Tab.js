@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-const Tab = ({ name }) => (<div>
-		{name}
-	</div>
-)
+export default class Tab extends Component {
+	render() {
+		return (
+			<div>
+				{props.name}
+			</div>
+		);
+	}
+}
 
 Tab.propTypes = {
 	name : PropTypes.string.isRequired
 };
-
-export default Tab;
 
 

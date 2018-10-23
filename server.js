@@ -5,7 +5,7 @@ const mysql = require('mysql');
 const path = require('path');
 
 const hostname = '0.0.0.0';
-const port = 8080;
+const port = 8088;
 
 
 let app = express();
@@ -52,7 +52,11 @@ app.get('/tabs/', get_tabs);
 app.get('/home/:name', function(req, res, next) {
 						let file = req.params.name;
 						file = path.join(__dirname, 'dist', file);
+						
+						res.header("Access-Control-Allow-Origin", "*");
+						res.header("Access-Control-Allow-Headers", "X-Requested-With");
 						res.sendFile(file);
+						
 						console.log("Served " + file);
 					}
 			);

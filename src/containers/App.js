@@ -1,10 +1,10 @@
 import React from 'react'
-import TabList from './TabList'
+import Tabs from './Tabs'
 
 let App = () => (
   <div>
   	Tabs:
-    <TabList />
+    <Tabs />
   </div>
 );
 
