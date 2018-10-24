@@ -70,20 +70,22 @@ app.get('/home/:name', function(req, res, next) {
 					}
 			);
 
-/*
-var con = mysql.createConnection({
-  host: "sql2.freemysqlhosting.net",
-  user: "sql2262231",
-  password: "eS8!fE8*",
-  database: "sql2262231",
-});*/
-
-var con = mysql.createConnection({
-	host: "127.0.0.1",
-	user: "root",
-	password: 'password',
-	database: 'portfolio',
-});
+var con;
+if(process.env.environment == 'openshift') {
+	con = mysql.createConnection({
+	  host: "sql2.freemysqlhosting.net",
+	  user: "sql2262231",
+	  password: "eS8!fE8*",
+	  database: "sql2262231",
+	});
+} else {
+	con = mysql.createConnection({
+		host: "127.0.0.1",
+		user: "root",
+		password: 'password',
+		database: 'portfolio',
+	});
+}
 
 app.listen(port, hostname, function() {
 	console.log("Listening on '" + hostname + ':' + port + "'");
