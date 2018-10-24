@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux'
-import pages from './pages'
+import { titles, body, loader } from './pages'
 
 
 export default combineReducers({
-	pages
+	titles,
+	body,
+	loader
 });

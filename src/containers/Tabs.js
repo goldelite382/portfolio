@@ -1,37 +1,39 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 
-import { fetchTabs } from '../actions';
 import PropTypes from 'prop-types'
 
-class Tabs extends Component {
+import Tab from '../components/tab'
+
+export class Tabs extends Component {
 	constructor(props) {
 		super(props);
-		
-	}
-	
-	componentDidMount() {
-		this.props.dispatch(fetchTabs());
 	}
 	
 	render() {
-		const { tabs } = this.props;
+		const { tabs, callback } = this.props;
 		
 		return (
 				<div>
-					{ tabs }
+					<ul className='tabs'>
+						{ tabs.map((tab, index) => (
+								<Tab key={index} id={'' + tab.id} value={tab.value} callback={callback} />
+							))
+						}
+					</ul>
 				</div>
 			);
 	}
 }
 
 
-const mapStateToProps = state => {
-	return { tabs : state.pages.tabs };
-}
+Tabs.propTypes = {
+	tabs:	PropTypes.arrayOf(
+				PropTypes.shape({
+					id : PropTypes.number.isRequired,
+					value : PropTypes.string.isRequired
+				}).isRequired,
+			).isRequired,
+	callback:	PropTypes.func.isRequired
+};
 
-	
-	
-export default connect(
-	mapStateToProps
-)(Tabs)
+

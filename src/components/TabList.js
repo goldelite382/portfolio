@@ -8,7 +8,7 @@ export default class TabList extends Component {
 		let tabs = [];
 		
 		return (
-			<ul> Tab:
+			<ul className='tabs'> Tab:
 				{ tabs.map((tab, index) => (
 						<Tab key={index} name={tab} />
 					))

@@ -1,30 +1,72 @@
-import { SHOW_CONTENT, LIST_CONTENT, ADD_CONTENT, READ_CONTENT, HIDE_CONTENT,
-		 FETCH_TABS_REQUEST, FETCH_TABS_SUCCESS, FETCH_TABS_FAILURE, RECEIVE_TABS } from '../actions';
+import {	REQUEST_POST_TITLES, REQUEST_POST_TITLES_SUCC, REQUEST_POST_TITLES_FAIL,
+		REQUEST_POST_BODY, REQUEST_POST_BODY_SUCC, REQUEST_POST_BODY_FAIL,
+		CYCLE_LOADER_DOTS } from '../actions';
 		
 		
-const pages = (state = { isFetching: false, didInvalidate: false, tabs: [] }, action) => {
+		
+		
+		
+export const titles = (state = { isFetching: false, titles: [] }, action) => {
 	switch(action.type) {
-		case FETCH_TABS_REQUEST:
+		case REQUEST_POST_TITLES:
 			return Object.assign({}, state, {
 				isFetching: true,
-				didInvalidate: false,
+				titles: [],
 			});
-		case RECEIVE_TABS:
+			
+		case REQUEST_POST_TITLES_SUCC:
 			return Object.assign({}, state, {
 				isFetching: false,
-				tabs: action.json.tabs,
+				titles: action.response.result
+			});
+			
+		case REQUEST_POST_TITLES_FAIL:
+			return Object.assign({}, state, {
+				isFetching: false,
 			});
 			
 			
-		case SHOW_CONTENT:
-			console.log("Showing content...");
-			return state;
-		case ADD_CONTENT:
-			console.log("Adding content...");
-			return [ ...state, { title: action.title, content: action.content } ];
 		default:
 			return state;
 	}
 };
 
-export default pages;
+
+
+export const body = (state = { isFetching: false, content: '' }, action) => {
+	switch(action.type) {
+		case REQUEST_POST_BODY:
+			return Object.assign({}, state, {
+				isFetching: true,
+				content: '',
+			});
+			
+		case REQUEST_POST_BODY_SUCC:
+			return Object.assign({}, state, {
+				isFetching: false,
+				content: action.response.result.content || '',
+			});
+			
+		case REQUEST_POST_BODY_FAIL:
+			return Object.assign({}, state, {
+				isFetching: false,
+				content: '',
+			});
+		
+		
+		default:
+			return state;
+	}
+};
+
+export const loader = (state = { dotcount: 1 }, action) => {
+	switch(action.type) {
+		case CYCLE_LOADER_DOTS:
+			return Object.assign({}, state, {
+				dotcount : (state.dotcount >= 3 ? 0 : state.dotcount + 1)
+			});
+		
+		default:
+			return state;
+	}
+};

@@ -8,10 +8,9 @@ $faint-contrast: hsla(50, 50%, 20%, 1);
 
 html {
 	background: $primary-background;
-	color: $strong-contrast;
 }
 
-.tabs {
+#tabs {
 	border: 2px solid $faint-contrast;
 	padding: 2px;
 	display: inline-block;
@@ -22,11 +21,11 @@ html {
 	}
 	
 	li {
+		display: inline-block;
 		margin: 2px;
 		padding: 5px;
 		color: $main-contrast;
 		border: 1px solid $faint-contrast;
-		list-style-type: none;
 	}
 	
 	li:hover {

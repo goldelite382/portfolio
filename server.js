@@ -4,6 +4,8 @@ const express = require('express');
 const mysql = require('mysql');
 const path = require('path');
 
+const sleep = require('sleep');
+
 const hostname = '0.0.0.0';
 const port = 8088;
 
@@ -19,36 +21,43 @@ app.use(
 
 
 
-function get_tabs(req, res, next) {
+function getContent(req, res, next) {
 	var tabs = [];
-	con.query("SELECT tabname FROM tabs WHERE tabname like ?", [ req.params.query || '%' ], function(err, result, fields) {
-		if (err) throw err;
 	
-		for(var i = 0; i < result.length; i++) {
-			tabs.push(result[i].tabname);
-		}
-		
-		
-		res.send({ query : req.params.query,
-					tabs : tabs
-				});
+	console.log("Sleeping...");
+	sleep.sleep(1);
+	console.log("Waking.");
+	
+	con.query("SELECT id, title FROM posts", function(err, result, fields) {
+		if(err)	{ console.log(err); res.send({ error: err.sqlMessage || err }); }
+		else		res.send({ result: result });
 		next();
 	});
 }
 
 
-function add_tab(req, res, next) {
-	con.query("INSERT INTO tabs (tabname) VALUES (?)", [ req.params.name ], function(err, result, fields) {
+function getSpecificContent(req, res, next) {
+	con.query("SELECT id, title, content FROM posts WHERE id=?", [ req.params.id || '%' ], function(err, result, fields) {
+		if(err)	{ console.log(err); res.send({ error: err.sqlMessage || err }); }
+		else		res.send({ result: result[0] });
+		next();
+	});
+}
+
+
+/*function add_tab(req, res, next) {
+	con.query("INSERT INTO tabs (title) VALUES (?)", [ req.params.name ], function(err, result, fields) {
 		res.send("Added '" + req.params.name + "' to tabs.");
 		next();
 	});
-}
+}*/
 
 
 
-app.get('/add/:name', add_tab);
-app.get('/tabs/:query', get_tabs);
-app.get('/tabs/', get_tabs);
+app.get('/content', getContent);
+app.get('/content/:id', getSpecificContent);
+
+
 app.get('/home/:name', function(req, res, next) {
 						let file = req.params.name;
 						file = path.join(__dirname, 'dist', file);
@@ -61,11 +70,19 @@ app.get('/home/:name', function(req, res, next) {
 					}
 			);
 
+/*
 var con = mysql.createConnection({
   host: "sql2.freemysqlhosting.net",
   user: "sql2262231",
   password: "eS8!fE8*",
   database: "sql2262231",
+});*/
+
+var con = mysql.createConnection({
+	host: "127.0.0.1",
+	user: "root",
+	password: 'password',
+	database: 'portfolio',
 });
 
 app.listen(port, hostname, function() {

@@ -1,5 +1,7 @@
 import fetch from 'cross-fetch'
 
+const REST_SERVER = 'http://127.0.0.1:8088/';
+
 function makeActionCreator(type, ...argNames) {
   return function (...args) {
     const action = { type }
@@ -12,41 +14,57 @@ function makeActionCreator(type, ...argNames) {
 
 
 
-export const LIST_CONTENT = 'LIST_CONTENT';
-export const SHOW_CONTENT = 'SHOW_CONTENT';
-export const ADD_CONTENT = 'ADD_CONTENT';
-export const READ_CONTENT = 'READ_CONTENT';
-export const HIDE_CONTENT = 'HIDE_CONTENT';
 
-export const listContent = makeActionCreator(LIST_CONTENT);
-export const showContent = makeActionCreator(SHOW_CONTENT, 'id');
-export const readContent = makeActionCreator(READ_CONTENT, 'id');
-export const hideContent = makeActionCreator(HIDE_CONTENT, 'id');
-export const addContent  = makeActionCreator(ADD_CONTENT, 'name', 'title', 'content');
+/* Post Title actions*/
+export const REQUEST_POST_TITLES = 'REQUEST_POST_TITLES'
+export const REQUEST_POST_TITLES_SUCC = 'REQUEST_POST_TITLES_SUCC'
+export const REQUEST_POST_TITLES_FAIL = 'REQUEST_POST_TITLES_FAIL'
 
 
-export const FETCH_TABS_REQUEST = 'FETCH_TABS_REQUEST';
-export const FETCH_TABS_SUCCESS = 'FETCH_TABS_SUCCESS';
-export const FETCH_TABS_FAILURE = 'FETCH_TABS_FAILURE';
-export const RECEIVE_TABS = 'RECEIVE_TABS';
-
-export const fetchTabsRequest = makeActionCreator(FETCH_TABS_REQUEST);
-export const fetchTabsSuccess = makeActionCreator(FETCH_TABS_SUCCESS, 'response');
-export const fetchTabsFailure = makeActionCreator(FETCH_TABS_FAILURE, 'failure');
-export const receiveTabs = makeActionCreator(RECEIVE_TABS, 'json');
+export const requestPostTitles = makeActionCreator(REQUEST_POST_TITLES);
+export const requestPostTitlesSucc = makeActionCreator(REQUEST_POST_TITLES_SUCC, 'response');
+export const requestPostTitlesFail = makeActionCreator(REQUEST_POST_TITLES_FAIL, 'error');
 
 
-
-
-export function fetchTabs() {
-	return function (dispatch) {
-		dispatch(fetchTabsRequest());
+export function fetchPostTitles() {
+	return function(dispatch) {
+		dispatch(requestPostTitles());
 		
-		return fetch('http://127.0.0.1:8088/tabs/')
-			.then(response => response.json(),
-				  failure => console.log("An error occurred: " + failure)
-				 )
-			.then(json => dispatch(receiveTabs(json))
-				);
+		return fetch(REST_SERVER + 'content')
+			.then(	response => response.json(),
+					error => dispatch(requestPostTitlesFail(error)))
+			.then(json => dispatch(requestPostTitlesSucc(json)));
 	};
-};
+}
+
+
+
+
+/* Post content actions */
+export const REQUEST_POST_BODY = 'REQUEST_POST_BODY'
+export const REQUEST_POST_BODY_SUCC = 'REQUEST_POST_BODY_SUCC'
+export const REQUEST_POST_BODY_FAIL = 'REQUEST_POST_BODY_FAIL'
+
+
+export const requestPostBody = makeActionCreator(REQUEST_POST_BODY);
+export const requestPostBodySucc = makeActionCreator(REQUEST_POST_BODY_SUCC, 'response');
+export const requestPostBodyFail = makeActionCreator(REQUEST_POST_BODY_FAIL, 'error');
+
+
+export function fetchPostBody(postid) {
+	return function(dispatch) {
+		dispatch(requestPostBody());
+		
+		return fetch(REST_SERVER + 'content/' + postid)
+			.then(	response => response.json(),
+					error => dispatch(requestPostBodyFail(error)))
+			.then(json => dispatch(requestPostBodySucc(json)));
+	};
+}
+
+
+
+
+/* Misc actions */
+export const CYCLE_LOADER_DOTS = 'CYCLE_LOADER_DOTS';
+export const cycleLoaderDots = makeActionCreator(CYCLE_LOADER_DOTS);
