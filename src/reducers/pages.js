@@ -1,9 +1,9 @@
 import {	REQUEST_POST_TITLES, REQUEST_POST_TITLES_SUCC, REQUEST_POST_TITLES_FAIL, REQUEST_NEW_POST_BODY,
 		REQUEST_POST_BODY, REQUEST_POST_BODY_SUCC, REQUEST_POST_BODY_FAIL,
 		ENABLE_EDIT_POST, DISABLE_EDIT_POST, SAVE_POST, SAVE_POST_SUCC, SAVE_POST_FAIL,
-		CYCLE_UPDATER_DOTS } from '../actions';
-		
-		
+		REQUEST_DELETE_POST, CANCEL_DELETE_POST, DELETE_POST, DELETE_POST_SUCC, DELETE_POST_FAIL,
+		 } from '../actions';
+	
 		
 		
 		
@@ -57,7 +57,7 @@ export const body = (state = { curid: undefined, title: '', content: '',
 				isFetching: false,
 				curid: action.response.result.id,
 				title: action.response.result.title || 'Undefined title',
-				content: action.response.result.content || 'Undefined content',
+				content: (action.response.result.content || 'Undefined content'),
 			});
 			
 		case REQUEST_POST_BODY_FAIL:
@@ -97,17 +97,33 @@ export const body = (state = { curid: undefined, title: '', content: '',
 				isSaving: false,
 			});
 		
-		default:
-			return state;
-	}
-};
-
-export const updater = (state = { dotcount: 1 }, action) => {
-	switch(action.type) {
-		case CYCLE_UPDATER_DOTS:
+		case REQUEST_DELETE_POST:
 			return Object.assign({}, state, {
-				dotcount : (state.dotcount >= 3 ? 0 : state.dotcount + 1)
+				requestingDeletion: true,
 			});
+		
+		case CANCEL_DELETE_POST:
+			return Object.assign({}, state, {
+				requestingDeletion: false,
+			});
+			
+		case DELETE_POST:
+			return Object.assign({}, state, {
+				requestingDeletion: false,
+				isDeleting: true,
+			});
+			
+		case DELETE_POST_SUCC:
+			return Object.assign({}, state, {
+				requestingDeletion: false,
+				isDeleting: false,
+			});
+			
+		case DELETE_POST_FAIL:
+			return Object.assign({}, state, {
+				isDeleting: false,
+			});
+			
 		
 		default:
 			return state;

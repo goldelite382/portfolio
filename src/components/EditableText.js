@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Markdown from 'react-markdown';
 
 export default class EditableText extends Component {
 	constructor(props) {
@@ -28,7 +29,7 @@ export default class EditableText extends Component {
 			if(type == 'header')
 				return (<h1 className={ className }>{ value }</h1>)
 			else if(type == 'text' || type == 'textbody')
-				return (<div className={ className }>{ value }</div>)
+				return (<div className={ className }><Markdown source={ value } /></div>)
 		}
 	}
 }

@@ -3,7 +3,7 @@
 const express = require('express');
 const mysql = require('mysql');
 const path = require('path');
-
+const bodyParser = require('body-parser');
 const sleep = require('sleep');
 
 const hostname = '0.0.0.0';
@@ -11,13 +11,15 @@ const port = 8088;
 
 
 let app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(
   function crossOrigin(req,res,next){
-  	console.log("Allowing cross-origin policy...");
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "content-type"); //"X-Requested-With");
 	res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
-    return next();
+	return next();
   }
 );
 
@@ -26,10 +28,9 @@ app.use(
 function getContent(req, res, next) {
 	var tabs = [];
 	
-	console.log("Sleeping...");
 	sleep.sleep(1);
-	console.log("Waking.");
 	
+	console.log("Getting content");
 	con.query("SELECT id, title FROM posts", function(err, result, fields) {
 		if(err)	{ console.log(err); res.send({ error: err.sqlMessage || err }); }
 		else		res.send({ result: result });
@@ -39,6 +40,8 @@ function getContent(req, res, next) {
 
 
 function getSpecificContent(req, res, next) {
+	console.log("Getting content for " + req.params.id);
+	
 	con.query("SELECT id, title, content FROM posts WHERE id=?", [ req.params.id ], function(err, result, fields) {
 		if(err)	{ console.log(err); res.send({ error: err.sqlMessage || err }); }
 		else		res.send({ result: result[0] });
@@ -47,7 +50,9 @@ function getSpecificContent(req, res, next) {
 }
 
 function createContent(req, res, next) {
-	con.query("INSERT INTO posts (title, content) VALUES (?, ?)", [ req.params.title || '', req.params.content || '' ], function(err, result, fields) {
+	console.log("Creating content...");
+	
+	con.query("INSERT INTO posts (title, content) VALUES (?, ?)", [ req.body.title || '', req.body.content || '' ], function(err, result, fields) {
 		if(err)	{ console.log(err); res.send({ error: err.sqlMessage || err }); next(); }
 		else		{
 			con.query("SELECT LAST_INSERT_ID() AS lii", function(err, result, fields) {
@@ -60,9 +65,17 @@ function createContent(req, res, next) {
 }
 
 function updateContent(req, res, next) {
-	con.query("UPDATE posts SET title=?, content=? WHERE id=?", [ req.params.title || '', req.params.content || '', req.params.id ], function(err, result, fields) {
+	con.query("UPDATE posts SET title=?, content=? WHERE id=?", [ req.body.title || '', req.body.content || '', req.body.id ], function(err, result, fields) {
 		if(err)	{ console.log(err); res.send({ error: err.sqlMessage || err }); }
 		else		res.send({ result: result[0] });
+		next();
+	});
+}
+
+function deleteContent(req, res, next) {
+	con.query("DELETE FROM posts WHERE id=?", [ req.params.id ], function(err, result, fields) {
+		if(err)	{ console.log(err); res.send({ error: err.sqlMessage || err }); }
+		else		res.send({ result: "Success" });
 		next();
 	});
 }
@@ -70,8 +83,9 @@ function updateContent(req, res, next) {
 
 app.get('/content', getContent);
 app.get('/content/:id', getSpecificContent);
-app.post('/content/:title/:content', createContent);
-app.put('/content/:id/:title/:content', updateContent);
+app.post('/content/', createContent);
+app.put('/content/', updateContent);
+app.delete('/content/:id', deleteContent);
 
 
 app.get('/home/:name', function(req, res, next) {

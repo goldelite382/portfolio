@@ -1,20 +1,18 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
 import { PropTypes } from 'prop-types'
 
-import { cycleUpdaterDots } from '../actions'
 
-
-class ProgressUpdater extends Component {
+export default class ProgressUpdater extends Component {
 	constructor(props) {
 		super(props);
 		
 		this.timer = null;
+		this.state = { dotCount: 1 };
 	}
 	
 	componentDidMount() {
 		if(this.timer) clearInterval(this.timer);
-		this.timer = setInterval(() => this.props.dispatch(cycleUpdaterDots()), 100);
+		this.timer = setInterval(() => ( this.setState({ dotCount: (this.state.dotCount >= 3 ? 0 : this.state.dotCount + 1) }) ), 100 );
 	}
 	
 	componentWillUnmount() {
@@ -25,7 +23,7 @@ class ProgressUpdater extends Component {
 	render() {
 		return (
 			<div className="updater">
-				{ this.props.text || 'Loading' }<span id="updater-dots">{'.'.repeat(this.props.dotcount)}</span>
+				{ this.props.text || 'Loading' }<span id="updater-dots">{'.' . repeat(this.state.dotCount) }</span>
 			</div>
 		);
 	}
@@ -35,9 +33,3 @@ ProgressUpdater.propTypes = {
 	text : PropTypes.string,
 }
 
-const mapStateToProps = state => {
-	return { dotcount : state.updater.dotcount,
-			};
-}
-
-export default connect(mapStateToProps)(ProgressUpdater)

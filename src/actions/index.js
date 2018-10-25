@@ -20,7 +20,6 @@ export const REQUEST_POST_TITLES = 'REQUEST_POST_TITLES'
 export const REQUEST_POST_TITLES_SUCC = 'REQUEST_POST_TITLES_SUCC'
 export const REQUEST_POST_TITLES_FAIL = 'REQUEST_POST_TITLES_FAIL'
 
-
 export const requestPostTitles = makeActionCreator(REQUEST_POST_TITLES);
 export const requestPostTitlesSucc = makeActionCreator(REQUEST_POST_TITLES_SUCC, 'response');
 export const requestPostTitlesFail = makeActionCreator(REQUEST_POST_TITLES_FAIL, 'error');
@@ -32,8 +31,8 @@ export function fetchPostTitles() {
 		
 		return fetch(REST_SERVER + 'content')
 			.then(	response => response.json(),
-					error => dispatch(requestPostTitlesFail(error)))
-			.then(json => dispatch(requestPostTitlesSucc(json)));
+					error => dispatch(requestPostTitlesFail(error)) )
+			.then(	response => dispatch(requestPostTitlesSucc(response)) );	// response is in json
 	};
 }
 
@@ -56,6 +55,7 @@ export function fetchPostBody(postid) {
 	return function(dispatch) {
 		dispatch(requestPostBody());
 		
+		console.log("Fetching post for ID " + postid);
 		return fetch(REST_SERVER + 'content/' + postid)
 			.then(	response => response.json(),
 					error => dispatch(requestPostBodyFail(error)))
@@ -76,16 +76,22 @@ export const savePost = makeActionCreator(SAVE_POST);
 export const savePostSucc = makeActionCreator(SAVE_POST_SUCC, 'response');
 export const savePostFail = makeActionCreator(SAVE_POST_FAIL, 'error');
 
+
+// Create or update a post
 export function commitPostData(postid, title, content) {
 	return function(dispatch) {
 		if(postid == undefined)
-			return fetch(REST_SERVER + 'content/' + title + '/' + content, { method: 'POST' })
+			return fetch(REST_SERVER + 'content/', { method: 'POST',
+													headers: { "content-type": "application/json", },
+													body: JSON.stringify({ title: title, content: content }) })
 				.then(	response => response.json(),
 						error => dispatch(savePostFail(error)))
 				.then(json => dispatch(savePostSucc(json)))
 				.then(json => ( dispatch(fetchPostBody(json.result.id)), dispatch(fetchPostTitles()) ));
 		else
-			return fetch(REST_SERVER + 'content/' + postid + '/' + title + '/' + content, { method: 'PUT' })
+			return fetch(REST_SERVER + 'content/', { method: 'PUT',
+													headers: { "content-type": "application/json", },
+													body: JSON.stringify({ id: postid, title: title, content: content }) })
 				.then(	response => response.json(),
 						error => dispatch(savePostFail(error)))
 				.then(json => dispatch(savePostSucc({ result: { id: postid } })))
@@ -95,8 +101,25 @@ export function commitPostData(postid, title, content) {
 }
 
 
+export const CHALLENGE_DELETE_POST = 'CHALLENGE_DELETE_POST'
+export const REQUEST_DELETE_POST = 'REQUEST_DELETE_POST'
+export const CANCEL_DELETE_POST = 'CANCEL_DELETE_POST'
+export const DELETE_POST = 'DELETE_POST'
+export const DELETE_POST_SUCC = 'DELETE_POST_SUCC'
+export const DELETE_POST_FAIL = 'DELETE_POST_FAIL'
 
-/* Misc actions */
-export const CYCLE_UPDATER_DOTS = 'CYCLE_UPDATER_DOTS';
-export const cycleUpdaterDots = makeActionCreator(CYCLE_UPDATER_DOTS);
+export const requestDeletePost = makeActionCreator(REQUEST_DELETE_POST);
+export const cancelDeletePost = makeActionCreator(CANCEL_DELETE_POST);
+export const deletePost = makeActionCreator(DELETE_POST);
+export const deletePostSucc = makeActionCreator(DELETE_POST_SUCC);
+export const deletePostFail = makeActionCreator(DELETE_POST_FAIL);
+
+export function deletePostData(postid) {
+	return function(dispatch) {
+		return fetch(REST_SERVER + 'content/' + postid, { method: 'DELETE' })
+			.then(	response => response.json(),
+					error => dispatch(deletePostFail(error)))
+			.then(json => dispatch(deletePostSucc(json)));
+	};
+}
 

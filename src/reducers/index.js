@@ -5,5 +5,4 @@ import { titles, body, updater } from './pages'
 export default combineReducers({
 	titles,
 	body,
-	updater
 });
