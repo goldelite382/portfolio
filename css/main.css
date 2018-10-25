@@ -12,14 +12,14 @@ html {
 }
 
 .tabs {
-	border: 2px solid $faint-contrast;
+	float: left;
+	padding-left: 0px 2px 2px 2px;
+	margin: 0px;
 	padding: 2px;
 	display: inline-block;
-	
-	ul {
-		padding-left: 0px;
-		margin: 0px;
-	}
+	border-top: 3px solid hsla(50, 50%, 20%, 1);
+	background-color: hsla(50, 0%, 100%, 0.1);
+	min-width: 100px;
 	
 	li {
 		margin: 2px;
@@ -29,9 +29,29 @@ html {
 		list-style-type: none;
 	}
 	
-	li:hover {
+	li:hover, li.selected {
 		cursor: pointer;
 		background-color: $active-background;
+		color: $strong-contrast;
+	}
+}
+
+
+.post {
+	float: left;
+	margin-left: 20px;
+	padding: 20px;
+	width: 50%;
+	background-color: hsla(0, 0%, 100%, 0.1);
+	
+	input.header {
+		font-size: 2em;
+	}
+	
+	input, textarea {
+		width: 100%;
+		background-color: hsla(0, 0%, 100%, 0.1);
+		border: 1px solid $faint-contrast;
 		color: $strong-contrast;
 	}
 }

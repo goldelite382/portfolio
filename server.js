@@ -13,8 +13,10 @@ const port = 8088;
 let app = express();
 app.use(
   function crossOrigin(req,res,next){
+  	console.log("Allowing cross-origin policy...");
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
+	res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
     return next();
   }
 );
@@ -37,7 +39,28 @@ function getContent(req, res, next) {
 
 
 function getSpecificContent(req, res, next) {
-	con.query("SELECT id, title, content FROM posts WHERE id=?", [ req.params.id || '%' ], function(err, result, fields) {
+	con.query("SELECT id, title, content FROM posts WHERE id=?", [ req.params.id ], function(err, result, fields) {
+		if(err)	{ console.log(err); res.send({ error: err.sqlMessage || err }); }
+		else		res.send({ result: result[0] });
+		next();
+	});
+}
+
+function createContent(req, res, next) {
+	con.query("INSERT INTO posts (title, content) VALUES (?, ?)", [ req.params.title || '', req.params.content || '' ], function(err, result, fields) {
+		if(err)	{ console.log(err); res.send({ error: err.sqlMessage || err }); next(); }
+		else		{
+			con.query("SELECT LAST_INSERT_ID() AS lii", function(err, result, fields) {
+				if(err) { console.log(err); res.send({ error: err.sqlMessage || err }); }
+				else		res.send({ result: result[0].lii });
+				next();
+			});
+		}
+	});
+}
+
+function updateContent(req, res, next) {
+	con.query("UPDATE posts SET title=?, content=? WHERE id=?", [ req.params.title || '', req.params.content || '', req.params.id ], function(err, result, fields) {
 		if(err)	{ console.log(err); res.send({ error: err.sqlMessage || err }); }
 		else		res.send({ result: result[0] });
 		next();
@@ -45,25 +68,16 @@ function getSpecificContent(req, res, next) {
 }
 
 
-/*function add_tab(req, res, next) {
-	con.query("INSERT INTO tabs (title) VALUES (?)", [ req.params.name ], function(err, result, fields) {
-		res.send("Added '" + req.params.name + "' to tabs.");
-		next();
-	});
-}*/
-
-
-
 app.get('/content', getContent);
 app.get('/content/:id', getSpecificContent);
+app.post('/content/:title/:content', createContent);
+app.put('/content/:id/:title/:content', updateContent);
 
 
 app.get('/home/:name', function(req, res, next) {
 						let file = req.params.name;
 						file = path.join(__dirname, 'dist', file);
 						
-						res.header("Access-Control-Allow-Origin", "*");
-						res.header("Access-Control-Allow-Headers", "X-Requested-With");
 						res.sendFile(file);
 						
 						console.log("Served " + file);

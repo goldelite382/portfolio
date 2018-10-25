@@ -1,27 +1,46 @@
 import React, { Component } from 'react'
-
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
-import Tab from '../components/tab'
+import { requestNewPostBody, fetchPostBody, enableEditPost, disableEditPost } from '../actions/';
 
-export class Tabs extends Component {
+import Tab from '../components/tab'
+import ProgressUpdater from '../components/progressupdater'
+
+class Tabs extends Component {
 	constructor(props) {
 		super(props);
+		
+		this.selectPost = this.selectPost.bind(this);
+		this.selectNewPost = this.selectNewPost.bind(this);
+	}
+	
+	
+	selectPost(id) {
+		this.props.dispatch(fetchPostBody(id));
+		this.props.dispatch(disableEditPost());
+	}
+	
+	selectNewPost() {
+		this.props.dispatch(requestNewPostBody());
+		this.props.dispatch(enableEditPost());
 	}
 	
 	render() {
-		const { tabs, callback } = this.props;
+		const { tabs, callback, isLoading, curid } = this.props;
 		
-		return (
-				<div>
+		if(isLoading)
+			return (<div className='tabs'><ProgressUpdater text='Fetching' /></div>);
+		else
+			return (
 					<ul className='tabs'>
 						{ tabs.map((tab, index) => (
-								<Tab key={index} id={'' + tab.id} value={tab.value} callback={callback} />
+								<Tab key={index} selected={ tab.id == curid } value={tab.value} callback={ () => this.selectPost(tab.id) } />
 							))
 						}
+						<Tab value="New post" callback={ () => this.selectNewPost() } />
 					</ul>
-				</div>
-			);
+				);
 	}
 }
 
@@ -33,7 +52,15 @@ Tabs.propTypes = {
 					value : PropTypes.string.isRequired
 				}).isRequired,
 			).isRequired,
-	callback:	PropTypes.func.isRequired
 };
 
 
+
+function mapStateToProps(state) {
+	return {
+			isLoading : state.titles.isFetching,
+			curid : state.body.curid,
+		};
+}
+
+export default connect(mapStateToProps)(Tabs)

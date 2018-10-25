@@ -3,20 +3,20 @@ import PropTypes from 'prop-types';
 
 export default class Tab extends Component {
 	render() {
-		const { callback, id, value } = this.props;
+		const { callback, value, selected } = this.props;
 		
 		return (
-			<li className="tab" onClick={() => callback(id)}>
-				{ id }) { value }
+			<li className={'tab' + (selected ? ' selected' : '') } onClick={() => callback()}>
+				{ value }
 			</li>
 		);
 	}
 }
 
 Tab.propTypes = {
-	id : PropTypes.string.isRequired,
 	value : PropTypes.string.isRequired,
 	callback : PropTypes.func.isRequired,
+	selected : PropTypes.bool,
 };
 
 

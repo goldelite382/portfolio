@@ -44,11 +44,12 @@ export function fetchPostTitles() {
 export const REQUEST_POST_BODY = 'REQUEST_POST_BODY'
 export const REQUEST_POST_BODY_SUCC = 'REQUEST_POST_BODY_SUCC'
 export const REQUEST_POST_BODY_FAIL = 'REQUEST_POST_BODY_FAIL'
-
+export const REQUEST_NEW_POST_BODY = 'REQUEST_NEW_POST_BODY'
 
 export const requestPostBody = makeActionCreator(REQUEST_POST_BODY);
 export const requestPostBodySucc = makeActionCreator(REQUEST_POST_BODY_SUCC, 'response');
 export const requestPostBodyFail = makeActionCreator(REQUEST_POST_BODY_FAIL, 'error');
+export const requestNewPostBody = makeActionCreator(REQUEST_NEW_POST_BODY);
 
 
 export function fetchPostBody(postid) {
@@ -63,8 +64,39 @@ export function fetchPostBody(postid) {
 }
 
 
+export const ENABLE_EDIT_POST = 'ENABLE_EDIT_POST'
+export const DISABLE_EDIT_POST = 'DISABLE_EDIT_POST'
+export const SAVE_POST = 'SAVE_POST'
+export const SAVE_POST_SUCC = 'SAVE_POST_SUCC'
+export const SAVE_POST_FAIL = 'SAVE_POST_FAIL'
+
+export const enableEditPost = makeActionCreator(ENABLE_EDIT_POST);
+export const disableEditPost = makeActionCreator(DISABLE_EDIT_POST);
+export const savePost = makeActionCreator(SAVE_POST);
+export const savePostSucc = makeActionCreator(SAVE_POST_SUCC, 'response');
+export const savePostFail = makeActionCreator(SAVE_POST_FAIL, 'error');
+
+export function commitPostData(postid, title, content) {
+	return function(dispatch) {
+		if(postid == undefined)
+			return fetch(REST_SERVER + 'content/' + title + '/' + content, { method: 'POST' })
+				.then(	response => response.json(),
+						error => dispatch(savePostFail(error)))
+				.then(json => dispatch(savePostSucc(json)))
+				.then(json => ( dispatch(fetchPostBody(json.result.id)), dispatch(fetchPostTitles()) ));
+		else
+			return fetch(REST_SERVER + 'content/' + postid + '/' + title + '/' + content, { method: 'PUT' })
+				.then(	response => response.json(),
+						error => dispatch(savePostFail(error)))
+				.then(json => dispatch(savePostSucc({ result: { id: postid } })))
+				.then(json => ( dispatch(fetchPostBody(postid)), dispatch(fetchPostTitles()) ));
+		
+	};
+}
+
 
 
 /* Misc actions */
-export const CYCLE_LOADER_DOTS = 'CYCLE_LOADER_DOTS';
-export const cycleLoaderDots = makeActionCreator(CYCLE_LOADER_DOTS);
+export const CYCLE_UPDATER_DOTS = 'CYCLE_UPDATER_DOTS';
+export const cycleUpdaterDots = makeActionCreator(CYCLE_UPDATER_DOTS);
+
