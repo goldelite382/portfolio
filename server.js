@@ -2,7 +2,7 @@
 
 // GLOBAL CONFIG
 const hostname = '0.0.0.0';
-const port = 8088;
+const port = 8080;
 
 const db_connLimit = 10;
 const db_host     = process.env.db_host || '127.0.0.1';
