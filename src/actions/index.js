@@ -1,6 +1,6 @@
 import fetch from 'cross-fetch'
 
-const REST_SERVER = 'http://127.0.0.1:8088/';
+const REST_SERVER = process.env.rest_server || 'http://127.0.0.1:8088/';
 
 function makeActionCreator(type, ...argNames) {
   return function (...args) {
