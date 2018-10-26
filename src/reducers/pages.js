@@ -49,6 +49,7 @@ export const body = (state = { curid: undefined, title: '', content: '',
 				isFetching: false,
 				curid: undefined,
 				title: 'New Post',
+				isLocked: false,
 				content: '',
 			});
 			
@@ -57,12 +58,14 @@ export const body = (state = { curid: undefined, title: '', content: '',
 				isFetching: false,
 				curid: action.response.result.id,
 				title: action.response.result.title || 'Undefined title',
-				content: (action.response.result.content || 'Undefined content'),
+				content: action.response.result.content || 'Undefined content',
+				isLocked: action.response.result.locked || false,
 			});
 			
 		case REQUEST_POST_BODY_FAIL:
 			return Object.assign({}, state, {
 				isFetching: false,
+				isLocked: false,
 				content: '',
 			});
 			

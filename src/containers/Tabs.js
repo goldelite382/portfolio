@@ -35,7 +35,7 @@ class Tabs extends Component {
 			return (
 					<ul className='tabs'>
 						{ tabs.map((tab, index) => (
-								<Tab key={index} selected={ tab.id == curid } value={tab.value} callback={ () => this.selectPost(tab.id) } />
+								<Tab key={index} selected={ tab.id == curid } isLocked={ tab.isLocked } value={tab.value} callback={ () => this.selectPost(tab.id) } />
 							))
 						}
 						<Tab value="New post" callback={ () => this.selectNewPost() } />
@@ -49,7 +49,8 @@ Tabs.propTypes = {
 	tabs:	PropTypes.arrayOf(
 				PropTypes.shape({
 					id : PropTypes.number.isRequired,
-					value : PropTypes.string.isRequired
+					value : PropTypes.string.isRequired,
+					isLocked : PropTypes.bool,
 				}).isRequired,
 			).isRequired,
 };

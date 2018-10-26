@@ -26,7 +26,7 @@ export default class Request extends Component {
 				{ this.props.text }
 				<br /><br />
 				{ this.props.succCallback && (<button onClick={ () => this.succCallback() }>{ this.props.succCallback.name || 'OK' }</button>) }
-				{ this.props.failCallback && (<button onClick={ () => this.failCallback() }>{ this.props.failCallback.name || 'Cancel' }></button>) }
+				{ this.props.failCallback && (<button onClick={ () => this.failCallback() }>{ this.props.failCallback.name || 'Cancel' }</button>) }
 			</div>
 		);
 	}

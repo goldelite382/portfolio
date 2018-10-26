@@ -27,7 +27,7 @@ class Post extends Component {
 	}
 	
 	render() {
-		let { editMode, isLoading, isSaving, requestingDeletion } = this.props;
+		let { id, editMode, isLocked, isLoading, isSaving, requestingDeletion } = this.props;
 		
 		if(isLoading)
 			return (<div className='post'><ProgressUpdater value='Fetching' /></div>);
@@ -38,7 +38,7 @@ class Post extends Component {
 			
 			if(requestingDeletion)
 				output = (<Request text={ "Are you sure you want to delete '" + this.props.title + "?'" }
-								succCallback={ { name: 'Yes', callback: () => this.submitDeletePost(this.props.id) } }
+								succCallback={ { name: 'Yes', callback: () => this.submitDeletePost(id) } }
 								failCallback={ { name: 'No', callback: () => this.props.dispatch(cancelDeletePost()) } } />
 						);
 					
@@ -51,8 +51,8 @@ class Post extends Component {
 						<EditableText editMode={ editMode } type='textbody' value={ this.state.content } onChange={ (val) => { this.setState({ content : val }) } } />
 				
 						{/* The save button */}
-						{ editMode && (<button onClick={ () => this.props.dispatch(commitPostData(this.props.id, this.state.title, this.state.content)) }>Save</button>) }
-						{ editMode && (<button onClick={ () => this.props.dispatch(requestDeletePost()) }>Delete</button>) }
+						{ editMode && !isLocked && (<button onClick={ () => this.props.dispatch(commitPostData(id, this.state.title, this.state.content)) }>Save</button>) }
+						{ editMode && !isLocked && id && (<button onClick={ () => this.props.dispatch(requestDeletePost()) }>Delete</button>) }
 					</div>
 			);
 		}
@@ -69,6 +69,7 @@ function mapStateToProps(state) {
 			id : state.body.curid,
 			title : state.body.title,
 			content : state.body.content,
+			isLocked : state.body.isLocked,
 		};
 }
 

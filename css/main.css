@@ -1,13 +1,20 @@
 $primary-background: hsla(280, 80%, 10%, 1);
 $active-background: hsla(280, 50%, 30%, 1);
+$object-background: hsla(0, 0%, 100%, 0.1);
 
 $strong-contrast: hsla(280, 50%, 80%, 1);
 $main-contrast: hsla(280, 50%, 60%, 1);
 $faint-contrast: hsla(50, 50%, 20%, 1);
 
+$greying: hsla(200, 30%, 15%, 1);
 
 html {
 	background: $primary-background;
+	color: $strong-contrast;
+	font-family: "Courier New", Courier, monospace;
+}
+
+a {
 	color: $strong-contrast;
 }
 
@@ -18,7 +25,7 @@ html {
 	padding: 2px;
 	display: inline-block;
 	border-top: 3px solid hsla(50, 50%, 20%, 1);
-	background-color: hsla(50, 0%, 100%, 0.1);
+	background-color: $object-background;
 	min-width: 100px;
 	
 	li {
@@ -29,6 +36,10 @@ html {
 		list-style-type: none;
 	}
 	
+	li.locked {
+		background-color: $greying;
+	}
+	
 	li:hover, li.selected {
 		cursor: pointer;
 		background-color: $active-background;
@@ -36,13 +47,28 @@ html {
 	}
 }
 
+button {
+	color: $main-contrast;
+	border: 1px solid $faint-contrast;
+	background-color: $object-background;
+	cursor: pointer;
+	font-size: larger;
+	margin: 5px;
+	padding: 2px;
+}
+
+	button:hover {
+		background-color: $active-background;
+		color: $strong-contrast;
+	}
+
 
 .post {
 	float: left;
 	margin-left: 20px;
 	padding: 20px;
 	width: 50%;
-	background-color: hsla(0, 0%, 100%, 0.1);
+	background: linear-gradient(to bottom, $object-background, $greying);
 	
 	input.header {
 		font-size: 2em;
@@ -50,9 +76,13 @@ html {
 	
 	input, textarea {
 		width: 100%;
-		background-color: hsla(0, 0%, 100%, 0.1);
+		background-color: $object-background;
 		border: 1px solid $faint-contrast;
 		color: $strong-contrast;
+	}
+	
+	textarea {
+		min-height: 200px;
 	}
 }
 
@@ -60,9 +90,9 @@ html {
 	position: fixed;
 	left: 50%;
 	top: 50%;
-	background-color: white;
-	color: black;
-	border: 1px solid red;
+	background-color: $object-background;
+	color: $strong-contrast;
+	border: 1px solid $faint-contrast;
 	
 	width: 400px;
 	margin-left: -100px;

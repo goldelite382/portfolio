@@ -29,7 +29,7 @@ export function fetchPostTitles() {
 	return function(dispatch) {
 		dispatch(requestPostTitles());
 		
-		return fetch(REST_SERVER + 'content')
+		return fetch(REST_SERVER + 'post')
 			.then(	response => response.json(),
 					error => dispatch(requestPostTitlesFail(error)) )
 			.then(	response => dispatch(requestPostTitlesSucc(response)) );	// response is in json
@@ -56,7 +56,7 @@ export function fetchPostBody(postid) {
 		dispatch(requestPostBody());
 		
 		console.log("Fetching post for ID " + postid);
-		return fetch(REST_SERVER + 'content/' + postid)
+		return fetch(REST_SERVER + 'post/' + postid)
 			.then(	response => response.json(),
 					error => dispatch(requestPostBodyFail(error)))
 			.then(json => dispatch(requestPostBodySucc(json)));
@@ -81,15 +81,15 @@ export const savePostFail = makeActionCreator(SAVE_POST_FAIL, 'error');
 export function commitPostData(postid, title, content) {
 	return function(dispatch) {
 		if(postid == undefined)
-			return fetch(REST_SERVER + 'content/', { method: 'POST',
+			return fetch(REST_SERVER + 'post/', { method: 'POST',
 													headers: { "content-type": "application/json", },
 													body: JSON.stringify({ title: title, content: content }) })
 				.then(	response => response.json(),
 						error => dispatch(savePostFail(error)))
 				.then(json => dispatch(savePostSucc(json)))
-				.then(json => ( dispatch(fetchPostBody(json.result.id)), dispatch(fetchPostTitles()) ));
+				.then(json => ( dispatch(fetchPostBody(json.response.result.id)), dispatch(fetchPostTitles()) ));
 		else
-			return fetch(REST_SERVER + 'content/', { method: 'PUT',
+			return fetch(REST_SERVER + 'post/', { method: 'PUT',
 													headers: { "content-type": "application/json", },
 													body: JSON.stringify({ id: postid, title: title, content: content }) })
 				.then(	response => response.json(),
@@ -116,7 +116,7 @@ export const deletePostFail = makeActionCreator(DELETE_POST_FAIL);
 
 export function deletePostData(postid) {
 	return function(dispatch) {
-		return fetch(REST_SERVER + 'content/' + postid, { method: 'DELETE' })
+		return fetch(REST_SERVER + 'post/' + postid, { method: 'DELETE' })
 			.then(	response => response.json(),
 					error => dispatch(deletePostFail(error)))
 			.then(json => dispatch(deletePostSucc(json)));

@@ -24,10 +24,10 @@ class Content extends Component {
 		
 		return (
 			<div>
-				{ editMode &&  (<button onClick={ () => this.props.dispatch(disableEditPost()) }>Cancel</button>) }
-				{ !editMode && (<button onClick={ () => this.props.dispatch(enableEditPost()) }>Edit</button>) }
+				{ editMode && id &&  (<button onClick={ () => this.props.dispatch(disableEditPost()) }>Cancel</button>) }
+				{ !editMode && id && (<button onClick={ () => this.props.dispatch(enableEditPost()) }>Edit</button>) }
 				
-				<Tabs tabs={ titles.map((tab, index) => ( { id : tab.id, value : tab.title } )) } />
+				<Tabs tabs={ titles.map((tab, index) => ( { id : tab.id, value : tab.title, isLocked : tab.locked } )) } />
 				
 				<Post key={ id } />
 			</div>
