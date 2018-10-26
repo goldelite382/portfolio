@@ -44,6 +44,7 @@
     "webpack-dev-server": "^3.1.9"
   },
   "dependencies": {
+    "express": "^4.16.4",
     "sleep": "^5.2.3"
   }
 }
