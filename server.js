@@ -1,8 +1,8 @@
 'use strict';
 
 // GLOBAL CONFIG
-const hostname = '0.0.0.0';
-const port = 8080;
+const hostname = process.env.srv_addr || '0.0.0.0';
+const port = process.env.srv_port || 8088;
 
 const db_connLimit = 10;
 const db_host     = process.env.db_host || '127.0.0.1';
