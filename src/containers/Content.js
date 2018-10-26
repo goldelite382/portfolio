@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { fetchPostTitles, fetchPostBody, enableEditPost, disableEditPost } from '../actions/'
 import Tabs from './Tabs'
 import Post from '../containers/Post'
-import ProgressUpdater from '../components/progressupdater'
+import ProgressUpdater from '../components/ProgressUpdater'
 
 import '../../css/main.css'
 

@@ -6,8 +6,8 @@ import PropTypes from 'prop-types';
 import { commitPostData, requestDeletePost, cancelDeletePost, deletePostData, fetchPostTitles, fetchPostBody } from '../actions/'
 
 import EditableText from '../components/EditableText'
-import ProgressUpdater from '../components/progressupdater'
-import Request from '../components/request'
+import ProgressUpdater from '../components/ProgressUpdater'
+import Request from '../components/Request'
 
 class Post extends Component {
 	constructor(props) {

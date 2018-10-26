@@ -4,8 +4,8 @@ import PropTypes from 'prop-types'
 
 import { requestNewPostBody, fetchPostBody, enableEditPost, disableEditPost } from '../actions/';
 
-import Tab from '../components/tab'
-import ProgressUpdater from '../components/progressupdater'
+import Tab from '../components/Tab'
+import ProgressUpdater from '../components/ProgressUpdater'
 
 class Tabs extends Component {
 	constructor(props) {
