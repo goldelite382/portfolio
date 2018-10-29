@@ -2,7 +2,7 @@
 
 // GLOBAL CONFIG
 const hostname = process.env.srv_addr || '0.0.0.0';
-const port = process.env.srv_port || 8088;
+const port = process.env.srv_port || 80;
 
 const db_connLimit = 10;
 const db_host     = process.env.db_host || '127.0.0.1';
@@ -64,11 +64,12 @@ const bodyParser = require('body-parser');
 					console.error('Database has too many connections');
 					break;
 				case 'ECONNREFUSED':
-					console.error('Couldn\'t connect to database');
+					console.error('Couldn\'t connect to database ' + db_database + ' on ' + db_host);
 					break;
 				default:
 					console.error("Unknown database error '" + err.code + "' ocurred.");
 			}
+			return;
 		}
 		
 		if (connection) connection.release();
