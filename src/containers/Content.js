@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
+import React, { Component, lazy, Suspense } from 'react'
 import { connect } from 'react-redux'
 
-import { fetchPostTitles, fetchPostBody, enableEditPost, disableEditPost } from '../actions/'
-import Tabs from './Tabs'
-import Post from '../containers/Post'
-import ProgressUpdater from '../components/ProgressUpdater'
+import { fetchPostTitles, fetchPostBody } from '../actions/posts'
+
+const Tabs = React.lazy(() => import('./Tabs'));
+const Post = React.lazy(() => import('./Post'));
 
 import '../../css/main.css'
 
@@ -12,24 +12,42 @@ import '../../css/main.css'
 class Content extends Component {
 	constructor(props) {
 		super(props);
+		
+		this.refreshTitles = this.refreshTitles.bind(this);
 	}
 	
 	componentDidMount() {
+		this.refreshTitles();
+	}
+	
+	componentDidUpdate(prevProps) {
+		if(this.props.userid !== prevProps.userid) {
+			this.refreshTitles();
+		}
+	}
+	
+	refreshTitles() {
 		this.props.dispatch(fetchPostTitles())
-			.then( action => this.props.dispatch(fetchPostBody(action.response.result[0].id)) );
+			.then( action => this.props.dispatch(fetchPostBody(action.response.posts[0].id)) );
 	}
 	
 	render() {
-		const { id, titles, editMode } = this.props;
+		const { id, titles } = this.props;
 		
 		return (
 			<div>
-				{ editMode && id &&  (<button onClick={ () => this.props.dispatch(disableEditPost()) }>Cancel</button>) }
-				{ !editMode && id && (<button onClick={ () => this.props.dispatch(enableEditPost()) }>Edit</button>) }
+				<Suspense fallback={<div>Loading post list...</div>}>
+					<div className="side-column">
+						<Tabs tabs={ titles.map((tab, index) => ( { id : tab.id, value : tab.title, isLocked : tab.locked } )) } />
+					
+					</div>
+				</Suspense>
 				
-				<Tabs tabs={ titles.map((tab, index) => ( { id : tab.id, value : tab.title, isLocked : tab.locked } )) } />
-				
-				<Post key={ id } />
+				<Suspense fallback={<div>Loading posts...</div>}>
+					<div className="main-column">
+						<Post key={ id } />
+					</div>
+				</Suspense>
 			</div>
 		);
 	};
@@ -37,9 +55,7 @@ class Content extends Component {
 
 
 function mapStateToProps(state) {
-	return {	editMode : state.body.editMode,
-			
-			titles : state.titles.titles,
+	return {	titles : state.titles.titles,
 			id : state.body.curid,
 		};
 }

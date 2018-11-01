@@ -1,74 +1,129 @@
-$primary-background: hsla(280, 80%, 10%, 1);
-$active-background: hsla(280, 50%, 30%, 1);
-$object-background: hsla(0, 0%, 100%, 0.1);
+$background: hsla(280, 10%, 90%, 1);
 
-$strong-contrast: hsla(280, 50%, 80%, 1);
-$main-contrast: hsla(280, 50%, 60%, 1);
-$faint-contrast: hsla(50, 50%, 20%, 1);
+$foreground: linear-gradient(to right, hsla(280, 20%, 80%, 0.9), hsla(320, 20%, 80%, 0.9));
+$active-foreground: hsla(280, 20%, 90%, 0.8);
+$editable-foreground: hsla(280, 20%, 10%, 0.1);
+$interactive-foreground: linear-gradient(to right, hsla(240, 40%, 70%, 0.8), hsla(180, 40%, 70%, 0.8));
+$subtle-interactive-foreground: linear-gradient(to right, hsla(200, 40%, 70%, 0.8), hsla(220, 40%, 70%, 0.8));
 
-$greying: hsla(200, 30%, 15%, 1);
+$border: hsla(250, 50%, 50%, 1);
+$prominent-border: hsla(270, 50%, 50%, 1);
 
-html {
-	background: $primary-background;
-	color: $strong-contrast;
-	font-family: "Courier New", Courier, monospace;
+$main-text: hsla(250, 100%, 20%, 1);
+$link-text: hsla(280, 0%, 0%, 1);
+$active-text: hsla(280, 0%, 0%, 1);
+
+
+$disabled-background: hsla(0, 0%, 70%, 1);
+$disabled-text: hsla(0, 0%, 50%, 1);
+
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
 
+
+html, body {
+	background: $background;
+	color: $main-text;
+	font-family: "Helvetica";
+	font-size: 15px;
+	padding: 0;
+	margin: 0;
+}
+
+.side-column {
+	width: 300px;
+	display: inline-block;
+	vertical-align: top;
+}
+
+.main-column {
+	width: 800px;
+	display: inline-block;
+	vertical-align: top;
+	margin: 5px;
+}
+
+
+
+
+
 a {
-	color: $strong-contrast;
+	color: $link-text;
+}
+
+hr {
+	color: $border;
+}
+
+h1 {
+	font-family: "Palatino";
+	font-size: 45px;
+	margin: 0em;
 }
 
 .tabs {
+	animation: fadein 0.5s;
 	float: left;
-	padding-left: 0px 2px 2px 2px;
-	margin: 0px;
-	padding: 2px;
+	margin: 5px;
+	padding: 10px 2px 2px 2px;
 	display: inline-block;
-	border-top: 3px solid hsla(50, 50%, 20%, 1);
-	background-color: $object-background;
-	min-width: 100px;
+	border-top: 5px solid $border;
+	background: $foreground;
+	width: 275px;
 	
 	li {
 		margin: 2px;
 		padding: 5px;
-		color: $main-contrast;
-		border: 1px solid $faint-contrast;
+		color: $main-text;
+		border: 1px solid $border;
 		list-style-type: none;
+		line-height: 25px;
+		vertical-align: middle;
+		background: $interactive-foreground;
 	}
 	
 	li.locked {
-		background-color: $greying;
+		background-color: $disabled-background;
 	}
 	
 	li:hover, li.selected {
 		cursor: pointer;
-		background-color: $active-background;
-		color: $strong-contrast;
+		background: $active-foreground;
+		color: $active-text;
+		font-size: 16px;
+		transition: font-size 0.1s;
 	}
 }
 
 button {
-	color: $main-contrast;
-	border: 1px solid $faint-contrast;
-	background-color: $object-background;
+	color: $main-text;
+	border: 1px solid $prominent-border;
+	background: $subtle-interactive-foreground;
 	cursor: pointer;
-	font-size: larger;
-	margin: 5px;
-	padding: 2px;
+	margin: 0px 5px;
+	padding: 2px 8px;
+	border-radius: 5px;
+	font-size: 15px;
 }
 
 	button:hover {
-		background-color: $active-background;
-		color: $strong-contrast;
+		background: $active-foreground;
+		color: $active-text;
 	}
 
 
 .post {
+	animation: fadein 0.5s;
 	float: left;
-	margin-left: 20px;
+	margin: 10px;
 	padding: 20px;
-	width: 50%;
-	background: linear-gradient(to bottom, $object-background, $greying);
+	border-radius: 5px;
+	background: $foreground;
+	border: 1px solid $border;
+	width: 100%;
 	
 	input.header {
 		font-size: 2em;
@@ -76,25 +131,42 @@ button {
 	
 	input, textarea {
 		width: 100%;
-		background-color: $object-background;
-		border: 1px solid $faint-contrast;
-		color: $strong-contrast;
+		background: $editable-foreground;
+		border: 1px solid $border;
+		color: $main-text;
 	}
 	
 	textarea {
-		min-height: 200px;
+		min-height: 400px;
 	}
 }
 
 .requestDialog {
 	position: fixed;
 	left: 50%;
-	top: 50%;
-	background-color: $object-background;
-	color: $strong-contrast;
-	border: 1px solid $faint-contrast;
+	top: 25%;
+	background: $foreground;
+	color: $main-text;
+	border: 1px solid $prominent-border;
+	border-top: 10px solid $prominent-border;
+	z-index: 5;
 	
 	width: 400px;
-	margin-left: -100px;
+	margin-left: -200px;
 	padding: 20px;
+}
+
+
+
+.loading {
+	background: $disabled-background;
+	border: 1px solid $border;
+}
+
+
+
+.login-panel {
+	padding: 2px;
+	text-align: right;
+	background: $foreground;
 }

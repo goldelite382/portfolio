@@ -3,11 +3,15 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
 
 
-import { commitPostData, requestDeletePost, cancelDeletePost, deletePostData, fetchPostTitles, fetchPostBody } from '../actions/'
+import { commitPostData, requestDeletePost,
+			cancelDeletePost, deletePostData,
+			fetchPostTitles, fetchPostBody,
+			enableEditPost, disableEditPost } from '../actions/posts'
+
 
 import EditableText from '../components/EditableText'
 import ProgressUpdater from '../components/ProgressUpdater'
-import Request from '../components/Request'
+//import Request from '../components/Request'
 
 class Post extends Component {
 	constructor(props) {
@@ -27,12 +31,12 @@ class Post extends Component {
 	}
 	
 	render() {
-		let { id, editMode, isLocked, isLoading, isSaving, requestingDeletion } = this.props;
+		let { id, editMode, userid, isLocked, isLoading, isSaving, requestingDeletion } = this.props;
 		
 		if(isLoading)
-			return (<div className='post'><ProgressUpdater value='Fetching' /></div>);
+			return (<div className='post loading'><ProgressUpdater value='Fetching' /></div>);
 		else if(isSaving)
-			return (<div className='post'><ProgressUpdater value='Saving' /></div>);
+			return (<div className='post loading'><ProgressUpdater value='Saving' /></div>);
 		else {
 			let output;
 			
@@ -47,12 +51,18 @@ class Post extends Component {
 			return (	<div className="post">
 						{ output }
 						<EditableText editMode={ editMode } type='header' className='header' value={ this.state.title } onChange={ (val) => { this.setState({ title : val }) } } />
+						
+						{ id && (<div>Author: { this.props.author }</div>)}
 						<hr />
 						<EditableText editMode={ editMode } type='textbody' value={ this.state.content } onChange={ (val) => { this.setState({ content : val }) } } />
 				
 						{/* The save button */}
 						{ editMode && !isLocked && (<button onClick={ () => this.props.dispatch(commitPostData(id, this.state.title, this.state.content)) }>Save</button>) }
 						{ editMode && !isLocked && id && (<button onClick={ () => this.props.dispatch(requestDeletePost()) }>Delete</button>) }
+						
+						{ userid && editMode && id &&  (<button onClick={ () => this.props.dispatch(disableEditPost()) }>Cancel</button>) }
+						{ userid && !editMode && id && (<button onClick={ () => this.props.dispatch(enableEditPost()) }>Edit</button>) }
+						
 					</div>
 			);
 		}
@@ -66,9 +76,12 @@ function mapStateToProps(state) {
 			
 			editMode : state.body.editMode,
 			
+			userid : state.accounts.userid,
+			
 			id : state.body.curid,
 			title : state.body.title,
 			content : state.body.content,
+			author: state.body.author,
 			isLocked : state.body.isLocked,
 		};
 }

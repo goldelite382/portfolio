@@ -2,8 +2,9 @@ import {	REQUEST_POST_TITLES, REQUEST_POST_TITLES_SUCC, REQUEST_POST_TITLES_FAIL
 		REQUEST_POST_BODY, REQUEST_POST_BODY_SUCC, REQUEST_POST_BODY_FAIL,
 		ENABLE_EDIT_POST, DISABLE_EDIT_POST, SAVE_POST, SAVE_POST_SUCC, SAVE_POST_FAIL,
 		REQUEST_DELETE_POST, CANCEL_DELETE_POST, DELETE_POST, DELETE_POST_SUCC, DELETE_POST_FAIL,
-		 } from '../actions';
+		 } from '../actions/posts';
 	
+import { showMessage } from '../actions/index'
 		
 		
 		
@@ -18,7 +19,7 @@ export const titles = (state = { isFetching: false, titles: [] }, action) => {
 		case REQUEST_POST_TITLES_SUCC:
 			return Object.assign({}, state, {
 				isFetching: false,
-				titles: action.response.result
+				titles: action.response.posts,
 			});
 			
 		case REQUEST_POST_TITLES_FAIL:
@@ -34,7 +35,7 @@ export const titles = (state = { isFetching: false, titles: [] }, action) => {
 
 
 
-export const body = (state = { curid: undefined, title: '', content: '',
+export const body = (state = { curid: undefined, title: '', content: '', author: '',
 								isFetching: false, isSaving: false, editMode: false,
 							}, action) => {
 	switch(action.type) {
@@ -49,17 +50,19 @@ export const body = (state = { curid: undefined, title: '', content: '',
 				isFetching: false,
 				curid: undefined,
 				title: 'New Post',
-				isLocked: false,
+				author: '',
 				content: '',
+				isLocked: false,
 			});
 			
 		case REQUEST_POST_BODY_SUCC:
 			return Object.assign({}, state, {
 				isFetching: false,
-				curid: action.response.result.id,
-				title: action.response.result.title || 'Undefined title',
-				content: action.response.result.content || 'Undefined content',
-				isLocked: action.response.result.locked || false,
+				curid: action.response.post.id,
+				title: action.response.post.title || 'Undefined title',
+				author: action.response.post.author || 'No author',
+				content: action.response.post.content || 'Undefined content',
+				isLocked: action.response.post.locked || false,
 			});
 			
 		case REQUEST_POST_BODY_FAIL:
@@ -91,7 +94,7 @@ export const body = (state = { curid: undefined, title: '', content: '',
 		case SAVE_POST_SUCC:
 			return Object.assign({}, state, {
 				isSaving: false,
-				curid: action.response.result.id,
+				curid: action.response.newid,
 				editMode: false,
 			});
 			

@@ -1,8 +1,8 @@
 'use strict';
 
 // GLOBAL CONFIG
-const hostname = process.env.srv_addr || '0.0.0.0';
-const port = process.env.srv_port || 80;
+const hostname = process.env.srv_addr || '127.0.0.1';
+const port = process.env.srv_port || 8088;
 
 const db_connLimit = 10;
 const db_host     = process.env.db_host || '127.0.0.1';
@@ -14,7 +14,8 @@ const express = require('express');
 const mysql = require('mysql');
 const path = require('path');
 const bodyParser = require('body-parser');
-
+const util = require('util');
+const session = require('express-session')
 
 
 // Setup the Webserver
@@ -23,12 +24,19 @@ const bodyParser = require('body-parser');
 	// Turn incoming json in the request body into a useable hash
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({ extended: true }));
+	app.use(session({
+			secret: 'keyboard cat',
+			resave: false,
+			saveUninitialized: true
+		}))
 	
 	// Enable CORS stuff -- probably not needed in production, but for my dev env
 	//					   this hosts RESTful stuff and webpackage hosts the react/redux stuff
 	app.use(
 	  function crossOrigin(req,res,next){
-		res.header("Access-Control-Allow-Origin", "*");
+		//res.header("Access-Control-Allow-Origin", "http://localhost:8080");
+		res.header("Access-Control-Allow-Origin", "http://voidfill.openode.io/");
+		res.header("Access-Control-Allow-Credentials", "true");
 		res.header("Access-Control-Allow-Headers", "content-type");
 		res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
 		return next();
@@ -52,6 +60,8 @@ const bodyParser = require('body-parser');
 		  database: db_database,
 	      connectionLimit: db_connLimit,
 		});
+	
+	db.query = util.promisify(db.query);
 		
 	// Test for a working connection
 	db.getConnection((err, connection) => {
@@ -77,8 +87,10 @@ const bodyParser = require('body-parser');
 		
 		
 		// Setup the custom routes we need
-		const Post = require('./server_code/posts.js');
+		const Post = require('./server_code/post.js');
 		let mypost = new Post(app, db);
+		const Account = require('./server_code/account.js');
+		let account = new Account(app, db);
 		
 		// Start listening on the webserver
 		app.listen(port, hostname, () => console.log("Listening on '" + hostname + ':' + port + "'") );

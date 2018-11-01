@@ -7,7 +7,7 @@ import { render } from 'react-dom'
 
 //import { listContent, addContent } from './actions';
 import rootReducer from './reducers';
-import Content from './containers/Content';
+import App from './containers/App';
 
 import { createLogger } from 'redux-logger'
 import thunkMiddleware from 'redux-thunk'
@@ -23,7 +23,7 @@ const store = createStore(rootReducer,
 
 render(
 	<Provider store={store}>
-		<Content />
+		<App />
 	</Provider>,
 	document.getElementById('basic')
 );
