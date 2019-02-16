@@ -1,0 +1,33 @@
+@import '../../app_style.scss';
+
+.post {
+	animation: fadein 0.5s;
+	float: left;
+	margin: 10px;
+	padding: 20px;
+	border-radius: 5px;
+	background: $foreground;
+	border: 1px solid $border;
+	width: 100%;
+	
+	input[type=text].header {
+		font-size: 2em;
+	}
+	
+	input[type=text], textarea {
+		width: 100%;
+		background: $editable-foreground;
+		border: 1px solid $border;
+		color: $main-text;
+	}
+	
+	textarea {
+		min-height: 400px;
+	}
+}
+
+
+.loading {
+	background: $foreground;
+	border: 1px solid $border;
+}

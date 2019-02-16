@@ -1,0 +1,16 @@
+@import '../../app_style.scss';
+
+.requestDialog {
+	position: fixed;
+	left: 50%;
+	top: 25%;
+	background: $foreground;
+	color: $main-text;
+	border: 1px solid $prominent-border;
+	border-top: 10px solid $prominent-border;
+	z-index: 5;
+	
+	width: 400px;
+	margin-left: -200px;
+	padding: 20px;
+}

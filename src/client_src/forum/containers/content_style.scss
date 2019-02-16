@@ -1,0 +1,14 @@
+@import '../../app_style.scss';
+
+.sideColumn {
+	width: 300px;
+	display: inline-block;
+	vertical-align: top;
+}
+
+.mainColumn {
+	width: 800px;
+	display: inline-block;
+	vertical-align: top;
+	margin: 5px;
+}

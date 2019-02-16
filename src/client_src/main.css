@@ -1,0 +1,70 @@
+$background: hsla(280, 10%, 90%, 1);
+
+$foreground: linear-gradient(to right, hsla(280, 20%, 80%, 0.9), hsla(320, 20%, 80%, 0.9));
+$active-foreground: hsla(280, 20%, 90%, 0.8);
+$editable-foreground: hsla(280, 20%, 10%, 0.1);
+$interactive-foreground: linear-gradient(to right, hsla(240, 40%, 70%, 0.8), hsla(180, 40%, 70%, 0.8));
+$subtle-interactive-foreground: linear-gradient(to right, hsla(200, 40%, 70%, 0.8), hsla(220, 40%, 70%, 0.8));
+
+$border: hsla(250, 50%, 50%, 1);
+$prominent-border: hsla(270, 50%, 50%, 1);
+
+$main-text: hsla(250, 100%, 20%, 1);
+$link-text: hsla(280, 0%, 0%, 1);
+$active-text: hsla(280, 0%, 0%, 1);
+
+
+$disabled-background: hsla(0, 100%, 40%, 1);
+$disabled-text: hsla(0, 0%, 50%, 1);
+
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+
+html, body {
+	background: $background;
+	color: $main-text;
+	font-family: "Helvetica";
+	font-size: 15px;
+	padding: 0;
+	margin: 0;
+}
+
+
+
+a {
+	color: $link-text;
+}
+
+hr {
+	color: $border;
+}
+
+h1 {
+	font-family: "Palatino";
+	font-size: 45px;
+	margin: 0em;
+}
+
+
+
+button {
+	color: $main-text;
+	border: 1px solid $prominent-border;
+	background: $subtle-interactive-foreground;
+	cursor: pointer;
+	margin: 0px 5px;
+	padding: 2px 8px;
+	border-radius: 5px;
+	font-size: 15px;
+}
+
+	button:hover {
+		background: $active-foreground;
+		color: $active-text;
+	}
+
+

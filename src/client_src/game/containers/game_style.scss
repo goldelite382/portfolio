@@ -1,0 +1,31 @@
+.panel {
+	border: 1px solid black;
+	display: inline-block;
+	margin: 20px;
+	vertical-align: middle;
+}
+
+.game {
+	background-color: darkseagreen;
+}
+
+.gameover {
+	.title {
+		font-size: 18pt;
+		font-weight: bold;
+		border-bottom: 1px solid black;
+		padding: 10pt;
+		background-color: lightcoral;
+		display: block;
+	}
+	
+	.content {
+		margin: 20px;
+	}
+	
+	a {
+		text-align: right;
+		display: block;
+		padding: 10px;
+	}
+}

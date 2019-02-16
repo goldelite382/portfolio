@@ -1,0 +1,24 @@
+@import '../../app_style.scss';
+
+.tab {
+	margin: 2px;
+	padding: 5px;
+	color: $main-text;
+	border: 1px solid $border;
+	list-style-type: none;
+	line-height: 25px;
+	vertical-align: middle;
+	background: $interactive-foreground;
+}
+
+.tab.locked {
+	background-color: $disabled-background;
+}
+
+.tab:hover, .tab.selected {
+	cursor: pointer;
+	background: $active-foreground;
+	color: $active-text;
+	font-size: 16px;
+	transition: font-size 0.1s;
+}
